@@ -1,5 +1,8 @@
 # CS:GO SQL & Data Visualization Project
 
+<img width="831" height="462" alt="image" src="https://github.com/user-attachments/assets/b68d1d76-c686-4fe4-bd45-1488d52c7c74" />
+
+
 ## 📌 Description
 This project analyzes professional **Counter-Strike: Global Offensive (CS:GO)** matches using data from HLTV / Kaggle.  
 The main goals are:
