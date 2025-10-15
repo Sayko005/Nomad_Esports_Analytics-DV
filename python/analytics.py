@@ -7,14 +7,12 @@ import plotly.express as px
 from openpyxl import load_workbook
 from openpyxl.formatting.rule import ColorScaleRule
 
-# DB URL
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg2://postgres:admin@localhost:5432/csgo")
 
-# FS
+
 os.makedirs("charts", exist_ok=True)
 os.makedirs("exports", exist_ok=True)
 
-# Style
 plt.rcParams.update({"figure.figsize": (9, 5), "axes.grid": True, "grid.alpha": 0.25, "font.size": 11})
 
 engine = create_engine(DATABASE_URL)
@@ -37,7 +35,6 @@ def save_html(fig, filename: str):
     print(f"[OK] saved charts/{filename} (HTML)")
 
 
-# --- имя ивента ---
 EVENT_NAME_CACHE = {}
 def get_event_name(event_id: int) -> str:
     if event_id in EVENT_NAME_CACHE: return EVENT_NAME_CACHE[event_id]
@@ -270,21 +267,6 @@ def export_to_excel(sheets: dict, filename: str):
     total = sum(len(df) for df in sheets.values() if df is not None)
     print(f"[OK] Excel {filename} with {len(sheets)} sheets, {total} rows")
 
-def demo_insert_row_and_regenerate(event_id=2208):
-    ename = get_event_name(event_id)
-    with engine.begin() as conn:
-        conn.execute(text("""
-            INSERT INTO matches (match_id, event_id, team_1, team_2, match_date, event_name)
-            VALUES (:mid, :eid, :t1, :t2, :d, :ename)
-            ON CONFLICT (match_id) DO NOTHING
-        """), {"mid": 999999, "eid": event_id, "t1": "DemoTeamA", "t2": "DemoTeamB",
-               "d": datetime.now().date(), "ename": ename})
-        conn.execute(text("""
-            INSERT INTO results (match_id, event_id, map, result_1, result_2, match_winner)
-            VALUES (:mid, :eid, :map, :r1, :r2, :w)
-            ON CONFLICT DO NOTHING
-        """), {"mid": 999999, "eid": event_id, "map": "Mirage", "r1": 16, "r2": 10, "w": 1})
-    pie_chart(event_id)
 
 
 if __name__ == "__main__":
