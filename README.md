@@ -52,5 +52,17 @@ psql -d csgo -f db/create_final.sql
 psql -d csgo -f sql/all_queries.sql
 
 
+# Build and start all services
+docker compose up -d --build
+
+# Verify
+localhost:9090   # Prometheus
+localhost:3000   # Grafana (admin / admin)
+localhost:8000   # Custom Exporter metrics
+localhost:9187   # PostgreSQL Exporter
+localhost:9100   # Node Exporter
+
+
+
 
 
